@@ -1,6 +1,5 @@
 package com.example.myapplication.Activities
 
-import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -14,6 +13,11 @@ class MainActivity: AppCompatActivity() {
     private lateinit var binding: MainLayoutBinding
 
     private lateinit var title: String
+    private var icon_pager = listOf<Int>(
+        R.drawable.ic_home_page,
+        R.drawable.ic_menu,
+        R.drawable.ic_customer
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +59,12 @@ class MainActivity: AppCompatActivity() {
                     }
                 }
                 tab.text = title
+                tab.setIcon(icon_pager[position])
             }
         }.attach()
+    }
+
+    fun getViewPager(): ViewPager2{
+        return binding.viewPager
     }
 }
