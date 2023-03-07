@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // 1.1 if login successful, go to main activity
             startActivity(intent);
+            finish();
         });
     }
 }

@@ -2,12 +2,11 @@ package com.example.storeapp.ViewModels;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.storeapp.Fragments.BillFragment;
+import com.example.storeapp.Fragments.OrderFragment;
 import com.example.storeapp.Fragments.CustomerFragment;
 import com.example.storeapp.Fragments.HomePageFragment;
 
@@ -26,7 +25,7 @@ public class MainAdapter extends FragmentStateAdapter {
             case 0:
                 return new HomePageFragment();
             case 1:
-                return new BillFragment();
+                return new OrderFragment();
             case 2:
                 return new CustomerFragment();
         }
