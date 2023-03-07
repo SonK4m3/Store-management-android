@@ -40,13 +40,13 @@
             android:id="@+id/usernameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:hint="username">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
                 android:background="@drawable/rounded_input"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -55,14 +55,14 @@
             android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:hint="password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:paddingLeft="10dp"
                 android:inputType="textPassword"
                 android:background="@drawable/rounded_input"/>
         </com.google.android.material.textfield.TextInputLayout>
