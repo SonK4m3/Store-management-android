@@ -46,6 +46,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.customerName.setText(order.getName());
         holder.quantity.setText(order.getQuantity());
         holder.total.setText(order.getTotal());
+
+        AppCompatButton cancelBtn = holder.cancelBtn;
+        cancelBtn.setOnClickListener(v -> {
+            Toast.makeText(v.getContext(), "HUY " + position, Toast.LENGTH_SHORT).show();
+
+            orderList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, orderList.size());
+        });
     }
 
     @Override
@@ -74,11 +83,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             quantity = itemView.findViewById(R.id.quantity_content);
             total = itemView.findViewById(R.id.total_content);
             cancelBtn = itemView.findViewById(R.id.cancel_btn);
-            
-            cancelBtn.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "HUY", Toast.LENGTH_SHORT).show();
-            });
-
         }
     }
 }

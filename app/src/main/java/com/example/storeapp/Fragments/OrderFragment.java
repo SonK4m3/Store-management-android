@@ -40,7 +40,7 @@ public class OrderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         orderList = new ArrayList();
-        for(int i = 1; i <= 5; i ++){
+        for(int i = 0; i < 5; i ++){
             orderList.add(new Order());
         }
 

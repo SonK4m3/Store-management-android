@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.Random;
 
 public class Order {
-    String idOrder = "DH";
-    String date = "00:00:00";
+    String idOrder = "DH10012021/16:26:49";
+    String date = "01/10/2021 16:26:49";
     enum State {
         NEW, OLD
     }

@@ -37,7 +37,7 @@ public class HomePageFragment extends Fragment {
             ViewPager2 viewPager2 = ((MainActivity) getActivity()).getViewPager();
                 CHOOSE_CUSTOMER = true;
 //            binding.notificationSelectCustomer.setVisibility(View.INVISIBLE);
-            viewPager2.setCurrentItem(CUSTOMER_PAGE_ID, true);
+            viewPager2.setCurrentItem(CUSTOMER_PAGE_ID, false);
         });
     }
 
