@@ -43,8 +43,7 @@ public class Order {
     }
 
     public String getTotal(){
-        String result = "24,700,000 VND";
-        return result;
+        return parceInt(this.total) + " VND";
     }
 
     public String getQuantity(){
@@ -53,5 +52,22 @@ public class Order {
 
     public String getState(){
         return (this.state == State.NEW) ? "Đơn hàng mới" : "Đơn hàng cũ";
+    }
+
+    String parceInt(int x){
+        String res = "";
+        int i = 0;
+        while(x > 0){
+            int y = x % 10;
+            i += 1;
+            if(i == 3 && x > 9){
+                res = "," + Integer.toString(y) + res;
+                i = 0;
+            } else {
+                res = Integer.toString(y) + res;
+            }
+            x /= 10;
+        }
+        return res;
     }
 }

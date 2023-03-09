@@ -5,15 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:id="@+id/item_layout">
-
-    <TextView
-        android:text="hello"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    android:gravity="center">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="@dimen/item_spacing"/>
 </LinearLayout>
