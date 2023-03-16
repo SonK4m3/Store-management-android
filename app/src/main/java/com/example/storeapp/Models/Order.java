@@ -1,73 +1,134 @@
 package com.example.storeapp.Models;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Order {
-    String idOrder = "DH10012021/16:26:49";
-    String date = "01/10/2021 16:26:49";
-    enum State {
+import androidx.annotation.NonNull;
+
+public class Order implements Parcelable {
+    public enum State {
         NEW, OLD
     }
-    State state = State.NEW;
-    String name = "hai vinh";
-    float quantity = 0.0f;
-    int total = 1000;
+    private String idOrder = "DH10012021/16:26:49";
+    private String date = "01/10/2021 16:26:49";
+    private State state = State.NEW;
+    private String name = "TEN DON HANG";
+    private ShoppingCart shoppingCart;
 
-    public Order(){
-        createOrder();
+    protected Order(Parcel in) {
+        idOrder = in.readString();
+        date = in.readString();
+        state = State.valueOf(in.readString());
+        name = in.readString();
+        shoppingCart = in.readParcelable(ShoppingCart.class.getClassLoader());
     }
 
-    void createOrder(){
-        Random ran = new Random();
-//        SimpleDateFormat idFormatter = new SimpleDateFormat("ddMMyyyy/HHmmss");
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(idOrder);
+        parcel.writeString(date);
+        parcel.writeString(state.name());
+        parcel.writeString(name);
+        parcel.writeParcelable(shoppingCart, i);
+    }
+    public Order(ShoppingCart shoppingCart){
+        this.shoppingCart = shoppingCart;
+        createOrderDate();
+    }
+
+    public Order(){
+        createOrderDate();
+    }
+
+    void createOrderDate(){
+//        SimpleDateFormat idFormatter = new SimpleDateFormat("yyyyMMdd/HHmmss");
 //        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 //        Date date = new Date();
 //        this.idOrder = "DH" + idFormatter.format(date);
 //        this.date = dateFormatter.format(date);
-        this.quantity = ran.nextFloat() * 1000;
-        this.total = ran.nextInt(2000000);
     }
 
-    public String getIdOrder(){
-        return this.idOrder;
+    public String getIdOrder() {
+        return idOrder;
     }
 
-    public String getDate(){
-        return this.date;
+    public void setIdOrder(String idOrder) {
+        this.idOrder = idOrder;
     }
 
-    public String getName(){
-        return this.name;
+    public String getDate() {
+        return date;
     }
 
-    public String getTotal(){
-        return parceInt(this.total) + " VND";
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getQuantity(){
-        return Float.toString(this.quantity);
+    public State getState() {
+        return state;
     }
 
-    public String getState(){
-        return (this.state == State.NEW) ? "Đơn hàng mới" : "Đơn hàng cũ";
+    public void setState(State state) {
+        this.state = state;
     }
 
-    String parceInt(int x){
-        String res = "";
-        int i = 0;
-        while(x > 0){
-            int y = x % 10;
-            i += 1;
-            if(i == 3 && x > 9){
-                res = "," + Integer.toString(y) + res;
-                i = 0;
-            } else {
-                res = Integer.toString(y) + res;
-            }
-            x /= 10;
-        }
-        return res;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
+
+    public String getStateStr(){
+        return (this.state == State.NEW) ? "Đơn hàng mới" : "Đơn hàng đã giao";
+    }
+
+    public int getTotalQuantity(){
+        return (this.shoppingCart != null) ? shoppingCart.getTotalQuantity() : 0;
+    }
+
+    public String getTotalPriceFormat(){
+        return (this.shoppingCart != null) ? shoppingCart.getTotalPriceFormat() : "0 VND";
+    }
+
+    public void remove(){
+
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "idOrder='" + idOrder + '\'' +
+                ", date='" + date + '\'' +
+                ", state=" + state +
+                ", name='" + name + '\'' +
+                ", shoppingCart=" + shoppingCart +
+                '}';
     }
 }

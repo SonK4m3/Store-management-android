@@ -29,6 +29,9 @@
         <activity android:name=".Activities.ShoppingCartActivity"
             android:label="ShoppingCartActivity"
             android:theme="@style/Theme.StoreApp"/>
+        <activity android:name=".Activities.ItemDetailActivity"
+            android:label="ItemDetailActivity"
+            android:theme="@style/Theme.StoreApp"/>
     </application>
 
 </manifest>

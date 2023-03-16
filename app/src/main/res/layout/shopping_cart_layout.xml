@@ -3,24 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:viewBindingIgnore="false"
     android:orientation="vertical"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="Không có sản phảm nào trong giỏ hàng"
-        android:textAlignment="center"
-        android:textSize="16sp"
+    <LinearLayout
+        android:id="@+id/notification"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
+        <TextView
+            android:text="Không có sản phảm nào trong giỏ hàng"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/notification_choose_item"
-        android:text="TIẾP TỤC CHỌN SẢN PHẨM"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/text_select"
+        <TextView
+            android:id="@+id/notification_choose_item"
+            android:text="TIẾP TỤC CHỌN SẢN PHẨM"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/text_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
 
 </LinearLayout>

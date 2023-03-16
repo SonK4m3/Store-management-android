@@ -1,14 +1,20 @@
 package com.example.storeapp.ViewModels;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.storeapp.Activities.ItemDetailActivity;
+import com.example.storeapp.Activities.MainActivity;
 import com.example.storeapp.Models.Item;
 import com.example.storeapp.R;
 
@@ -16,12 +22,22 @@ import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
     private List itemList;
     private Context mContext;
+    private Activity mActivity;
+    private OnItemClickListener mListener;
 
-    public ItemAdapter(List itemList, Context mContext){
+    public ItemAdapter(List itemList, Activity activity){
         this.itemList = itemList;
-        this.mContext = mContext;
+        this.mContext = activity.getBaseContext();
+        this.mActivity = activity;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
     }
 
     @NonNull
@@ -30,7 +46,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.item_layout, parent, false);
-        return new ItemViewHolder(itemView);
+        return new ItemViewHolder(itemView, mActivity);
     }
 
     @Override
@@ -39,6 +55,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         holder.itemName.setText(item.getName());
         holder.itemPrice.setText(item.getPriceAsString());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mListener != null){
+                    mListener.onItemClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -46,13 +70,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return itemList.size();
     }
 
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+     class ItemViewHolder extends RecyclerView.ViewHolder {
         private View itemview;
+        private Context mContext;
+        private Activity mActivity;
         public TextView itemName;
         public TextView itemPrice;
-        public ItemViewHolder(View itemView){
+        public ItemViewHolder(View itemView, Activity activity){
             super(itemView);
             itemview = itemView;
+            mContext = activity.getBaseContext();
+            mActivity = activity;
             itemName = itemView.findViewById(R.id.itemName);
             itemPrice = itemView.findViewById(R.id.itemPrice);
         }

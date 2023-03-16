@@ -17,13 +17,21 @@ import com.example.storeapp.R;
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
-
+    public interface OnClickOder {
+        void onRemoveOrder(int position);
+    }
     private List orderList;
     private Context mContext;
 
     public OrderAdapter(List orderList, Context mContext){
         this.orderList = orderList;
         this.mContext = mContext;
+    }
+
+    private OnClickOder mListener;
+
+    public void setOnClickCartItem(OnClickOder listener){
+        mListener = listener;
     }
 
     @NonNull
@@ -42,18 +50,24 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         holder.orderId.setText(order.getIdOrder());
         holder.orderDay.setText(order.getDate());
-        holder.customerState.setText(order.getState());
+        holder.customerState.setText(order.getStateStr());
         holder.customerName.setText(order.getName());
-        holder.quantity.setText(order.getQuantity());
-        holder.total.setText(order.getTotal());
+        holder.quantity.setText(Integer.toString(order.getTotalQuantity()));
+        holder.total.setText(order.getTotalPriceFormat());
 
-        AppCompatButton cancelBtn = holder.cancelBtn;
-        cancelBtn.setOnClickListener(v -> {
+        holder.cancelBtn.setOnClickListener(v -> {
             Toast.makeText(v.getContext(), "HUY " + position, Toast.LENGTH_SHORT).show();
 
-            orderList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, orderList.size());
+            // 1. check if user tab is really fast, to handle user tab event
+            if(position < orderList.size() && orderList.contains(orderList.get(position))){
+                orderList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, orderList.size());
+
+                if(mListener != null){
+                    mListener.onRemoveOrder(position);
+                }
+            }
         });
     }
 

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher_background"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quần JEAN Nam GTB 440"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số lượng: "
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart" />
+            <TextView
+                android:id="@+id/quantity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="11000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng tiền: "
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart" />
+            <TextView
+                android:id="@+id/total_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="24,750,0000 VND"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/remove_btn"
+        android:layout_width="50px"
+        android:layout_height="50px"
+        android:background="@drawable/ic_remove"/>
+    </LinearLayout>
+</LinearLayout>

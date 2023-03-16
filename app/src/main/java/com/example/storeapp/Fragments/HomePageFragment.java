@@ -13,14 +13,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.storeapp.Activities.MainActivity;
-import com.example.storeapp.R;
+import com.example.storeapp.Models.Customer;
 import com.example.storeapp.databinding.HomeLayoutBinding;
-import com.example.storeapp.databinding.ItemListLayoutBinding;
-import com.example.storeapp.databinding.OrderListLayoutBinding;
 
 public class HomePageFragment extends Fragment {
-    private static final int CUSTOMER_PAGE_ID = 2;
-    private boolean CHOOSE_CUSTOMER = false;
     private HomeLayoutBinding homeLayoutBinding = null;
     @Nullable
     @Override
@@ -41,12 +37,7 @@ public class HomePageFragment extends Fragment {
         homeLayoutBinding.changeToCustomer.setOnClickListener(v -> {
             // 2.1 go to customer fragment
             ViewPager2 viewPager2 = ((MainActivity) getActivity()).getViewPager();
-            viewPager2.setCurrentItem(CUSTOMER_PAGE_ID, false);
-            // 2.2 check is choose customer or not
-            CHOOSE_CUSTOMER = true;
-            // 2.3 visiability item list
-            homeLayoutBinding.notificationSelectCustomer.setVisibility(View.GONE);
-            homeLayoutBinding.fragmentContainer.setVisibility(View.VISIBLE);
+            viewPager2.setCurrentItem(MainActivity.CUSTOMER_PAGE_ID, false);
         });
     }
 
@@ -54,5 +45,10 @@ public class HomePageFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         homeLayoutBinding = null;
+    }
+
+    public void showItemList(){
+        homeLayoutBinding.notificationSelectCustomer.setVisibility(View.GONE);
+        homeLayoutBinding.fragmentContainer.setVisibility(View.VISIBLE);
     }
 }
