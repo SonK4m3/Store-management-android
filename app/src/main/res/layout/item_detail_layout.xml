@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:viewBindingIgnore="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_image"
+    android:gravity="bottom">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/imageRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_detail"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/itemName"
+            android:text="Quần Jeans Nam GTB 440"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/btn_bg_color"
+            />
+
+        <TextView
+            android:id="@+id/itemPrice"
+            android:text="225,000 VND"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/btn_bg_color"/>
+
+        <TextView
+            android:text="Mô tả sản phẩm:"
+            android:labelFor="@+id/itemDesciption"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/itemDesciption"
+            android:text="không có mô tả sản phẩm"
+            android:background="@drawable/rounded_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"/>
+
+        <TextView
+            android:text="Chọn màu:"
+            android:textAllCaps="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/decrease_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_minus"/>
+
+            <TextView
+                android:id="@+id/quantity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="5"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/increase_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_plus"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng số lượng: "/>
+            <TextView
+                android:id="@+id/total_quantity_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="110"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tổng tiền: "/>
+
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="24,750,000 VND" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:layout_marginTop="20dp">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/addToCart"
+                android:text="THÊM VÀO GIỎ HÀNG"
+                android:textColor="@color/text_select"
+
+                android:background="@drawable/rounded_add_item_btn"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/createOrder"
+                android:text="TẠO ĐƠN HÀNG"
+                android:textColor="@color/white"
+
+                android:background="@drawable/rounded"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

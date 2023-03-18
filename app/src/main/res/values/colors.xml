@@ -8,7 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
-    <color name="red_2">#FF3232</color>
+    <color name="btn_bg_color">#EB455F</color>
+    <color name="order_text_color">#2B3467</color>
     <color name="text_select">#3498DB</color>
     <color name="stroke_input">#808080</color>
+    <color name="order">#BAD7E9</color>
+
+    <color name="app_bar">#0081C9</color>
+    <color name="bg_image">#5BC0F8</color>
 </resources>
