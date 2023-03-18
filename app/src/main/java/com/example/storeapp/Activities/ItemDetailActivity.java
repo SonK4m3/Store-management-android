@@ -22,20 +22,18 @@ import com.example.storeapp.databinding.ItemDetailLayoutBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ItemDetailActivity extends AppCompatActivity{
     public static final int CREATE_ORDER = 931;
     public static final int ADD_TO_SHOPPING_CART = 932;
-    private boolean isChooseItem = false;
     private ItemDetailLayoutBinding binding = null;
     private ArrayList<ItemCategory> categories = null;
     private final int MIN_QUANTITY = 5;
     private int quantity = 5;
     private int totalQuantity = 0;
     private int totalPrice = 0;
-    private Item item;
-    private Bundle mBundle;
+    private Item item = null;
+    private Bundle mBundle = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,21 +44,25 @@ public class ItemDetailActivity extends AppCompatActivity{
         setTitle("Chi tiết sản phẩm");
         // 1.
         mBundle = getIntent().getExtras();
-        isChooseItem =mBundle.getBoolean(MainActivity.ITEM_CHOOSING);
         item = mBundle.getParcelable(MainActivity.SEND_ITEM);
         categories = item.getItemCategories();
+        quantity = (categories.isEmpty()) ? 0 : categories.get(0).getQuantity();
         totalQuantity = (categories.isEmpty()) ? 0 : categories.get(0).getQuantity();
         totalPrice = item.getPrice(totalQuantity);
+        binding.quantityText.setText(Integer.toString(quantity));
         binding.totalQuantityText.setText(Integer.toString(totalQuantity));
         binding.totalPrice.setText(Item.parceInt(totalPrice) + "VND");
 
-        List<String> mList = new ArrayList<>();
+        ArrayList<String> mImageList = new ArrayList<>();
+        ArrayList<String> mCategoriesList = new ArrayList<>();
+
         for(int i = 0; i < categories.size(); i++){
-            mList.add(categories.get(i).getName());
+            mCategoriesList.add(categories.get(i).getName());
+            mImageList.add(categories.get(i).getImage_url());
         }
 
         binding.imageRecyclerView.setAdapter(new ImageItemDetailAdapter(
-                mList, this
+                mImageList, this
         ));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -68,7 +70,7 @@ public class ItemDetailActivity extends AppCompatActivity{
         binding.imageRecyclerView.setLayoutManager(linearLayoutManager);
 
         // 2. add spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.v1_spinner_item, mList);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.v1_spinner_item, mCategoriesList);
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(R.layout.v1_spinner_drop_item);
         // attaching data adapter to spinner
@@ -111,7 +113,11 @@ public class ItemDetailActivity extends AppCompatActivity{
         });
         binding.createOrder.setOnClickListener(v -> {
             // 3.2 create new order and back to home list
-            setResult(CREATE_ORDER, getIntent());
+            Intent data = getIntent();
+            mBundle.putParcelable(MainActivity.SEND_ITEM, item);
+            mBundle.putInt(MainActivity.SEND_QUANTITY, quantity);
+            data.putExtras(mBundle);
+            setResult(CREATE_ORDER, data);
             finish();
         });
     }
@@ -143,7 +149,7 @@ public class ItemDetailActivity extends AppCompatActivity{
                 return true;
             case R.id.shopping_cart:
                 Intent intentShopping = new Intent(this, ShoppingCartActivity.class);
-                intentShopping.putExtra(MainActivity.ITEM_CHOOSING, isChooseItem);
+                intentShopping.putExtras(mBundle);
                 startActivityForResult(intentShopping, MainActivity.CHOOSE_ITEM);
                 return true;
             default:break;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.example.storeapp.Activities.ItemDetailActivity;
 import com.example.storeapp.Activities.MainActivity;
 import com.example.storeapp.Models.Item;
 import com.example.storeapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -52,7 +54,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Item item = (Item) itemList.get(position);
-
+        if(!item.getImageUrl().equals(""))
+            Picasso.get().load(item.getImageUrl()).into(holder.itemImage);
         holder.itemName.setText(item.getName());
         holder.itemPrice.setText(item.getPriceAsString());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +79,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         private Activity mActivity;
         public TextView itemName;
         public TextView itemPrice;
+        public ImageView itemImage;
         public ItemViewHolder(View itemView, Activity activity){
             super(itemView);
             itemview = itemView;
@@ -83,6 +87,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             mActivity = activity;
             itemName = itemView.findViewById(R.id.itemName);
             itemPrice = itemView.findViewById(R.id.itemPrice);
+            itemImage = itemView.findViewById(R.id.itemImage);
         }
     }
 }

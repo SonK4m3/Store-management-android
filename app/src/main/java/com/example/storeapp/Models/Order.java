@@ -1,18 +1,25 @@
 package com.example.storeapp.Models;
 
+import android.icu.text.SimpleDateFormat;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.Date;
+
 public class Order implements Parcelable {
     public enum State {
         NEW, OLD
     }
-    private String idOrder = "DH10012021/16:26:49";
-    private String date = "01/10/2021 16:26:49";
-    private State state = State.NEW;
-    private String name = "TEN DON HANG";
+    @SerializedName("id") private String idOrder = "DH01012023/000000";
+    @SerializedName("date") private String date = "01/01/2023 00:00:00";
+    @SerializedName("state") private State state = State.NEW;
+    @SerializedName("customer_name") private String name = "TEN KHACH HANG";
+    @SerializedName("total_quantity") private int totalQuantity = 0;
+    @SerializedName("total_price") private int totalPrice = 0;
     private ShoppingCart shoppingCart;
 
     protected Order(Parcel in) {
@@ -20,6 +27,8 @@ public class Order implements Parcelable {
         date = in.readString();
         state = State.valueOf(in.readString());
         name = in.readString();
+        totalQuantity = in.readInt();
+        totalPrice = in.readInt();
         shoppingCart = in.readParcelable(ShoppingCart.class.getClassLoader());
     }
 
@@ -46,11 +55,17 @@ public class Order implements Parcelable {
         parcel.writeString(date);
         parcel.writeString(state.name());
         parcel.writeString(name);
+        parcel.writeInt(totalQuantity);
+        parcel.writeInt(totalPrice);
         parcel.writeParcelable(shoppingCart, i);
     }
     public Order(ShoppingCart shoppingCart){
         this.shoppingCart = shoppingCart;
+        this.name = shoppingCart.getCustomer().getName();
         createOrderDate();
+
+        this.totalQuantity = (this.shoppingCart != null) ? shoppingCart.getTotalQuantity() : 0;
+        this.totalPrice = (this.shoppingCart != null) ? shoppingCart.getTotalPrice() : 0;
     }
 
     public Order(){
@@ -58,11 +73,11 @@ public class Order implements Parcelable {
     }
 
     void createOrderDate(){
-//        SimpleDateFormat idFormatter = new SimpleDateFormat("yyyyMMdd/HHmmss");
-//        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//        Date date = new Date();
-//        this.idOrder = "DH" + idFormatter.format(date);
-//        this.date = dateFormatter.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        this.idOrder = "DH" + sdf.format(new Date()) + "/";
+        this.date = dateFormatter.format(new Date());
     }
 
     public String getIdOrder() {
@@ -103,22 +118,24 @@ public class Order implements Parcelable {
 
     public void setShoppingCart(ShoppingCart shoppingCart) {
         this.shoppingCart = shoppingCart;
+        this.totalQuantity = (this.shoppingCart != null) ? shoppingCart.getTotalQuantity() : 0;
+        this.totalPrice = (this.shoppingCart != null) ? shoppingCart.getTotalPrice() : 0;
     }
 
     public String getStateStr(){
-        return (this.state == State.NEW) ? "Đơn hàng mới" : "Đơn hàng đã giao";
+        return (this.state == State.NEW) ? "Đơn hàng mới" : "Đơn hàng đã xác nhận";
     }
 
     public int getTotalQuantity(){
-        return (this.shoppingCart != null) ? shoppingCart.getTotalQuantity() : 0;
+        return this.totalQuantity;
+    }
+
+    public int getTotalPrice() {
+        return this.totalPrice;
     }
 
     public String getTotalPriceFormat(){
-        return (this.shoppingCart != null) ? shoppingCart.getTotalPriceFormat() : "0 VND";
-    }
-
-    public void remove(){
-
+        return Item.parceInt(totalPrice) + " VND";
     }
 
     @Override

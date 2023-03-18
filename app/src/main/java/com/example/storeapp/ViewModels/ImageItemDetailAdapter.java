@@ -10,15 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storeapp.R;
+import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class ImageItemDetailAdapter extends RecyclerView.Adapter<ImageItemDetailAdapter.ImageViewHolder> {
 
-    private List mImageList;
+    private ArrayList<String> mImageList;
     private Context mContext;
 
-    public ImageItemDetailAdapter(List mImageList, Context mContext){
+    public ImageItemDetailAdapter(ArrayList<String> mImageList, Context mContext){
         this.mContext = mContext;
         this.mImageList = mImageList;
     }
@@ -34,7 +35,10 @@ public class ImageItemDetailAdapter extends RecyclerView.Adapter<ImageItemDetail
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        holder.image.setImageAlpha(R.drawable.ic_launcher_background);
+        if(!mImageList.get(position).equals(""))
+            Picasso.get().load(mImageList.get(position)).into(holder.image);
+        else
+            holder.image.setImageAlpha(R.drawable.ic_launcher_background);
     }
 
     @Override

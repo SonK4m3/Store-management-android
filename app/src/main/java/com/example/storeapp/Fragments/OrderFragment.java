@@ -13,9 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.storeapp.Activities.MainActivity;
-import com.example.storeapp.Activities.OnCreateOrderListener;
+import com.example.storeapp.Models.OnCreateOrderListener;
 import com.example.storeapp.Models.Order;
-import com.example.storeapp.ViewModels.CartItemAdapter;
 import com.example.storeapp.ViewModels.OrderAdapter;
 import com.example.storeapp.databinding.OrderListLayoutBinding;
 
@@ -25,22 +24,18 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
     private OrderListLayoutBinding binding = null;
     private ArrayList<Order> orderList = new ArrayList<Order>();
     private OrderAdapter adapter = null;
-    private OnOrderClickListener mDataTransferListener;
+    private OnOrderClickListener mDataTransferListener = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
+            // 1. assign from parent activity
             mDataTransferListener = (OnOrderClickListener) context;
             ((MainActivity) getActivity()).setCreateOrderListener(this);
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString());
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -54,7 +49,9 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 1. create order adapter
         adapter = new OrderAdapter(orderList, getContext());
+        // 1.1 when click remove order, callback to order list in main activity to remove it
         adapter.setOnClickCartItem(new OrderAdapter.OnClickOder() {
             @Override
             public void onRemoveOrder(int position) {
@@ -69,6 +66,10 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
         binding.recyclerView.setLayoutManager(linearLayoutManager);
     }
 
+    /*
+    -> update order list when add more order to list
+    -> notify to adapter re-update recycler view
+     */
     @Override
     public void onOrderCreated(ArrayList<Order> orders) {
         orderList.clear();
@@ -78,6 +79,9 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
         Log.d("AAA", "Update order recyclerView " + Integer.toString(orders.size()));
     }
 
+    /*
+    create callback to main activity when click to order
+     */
     public interface OnOrderClickListener {
         void onRemoveOrder(int position);
     }

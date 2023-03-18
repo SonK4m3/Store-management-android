@@ -5,17 +5,19 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Item implements Parcelable {
     static int number = 0;   // thuộc tính dùng để test
-    private String id = "MDH";
-    private String name = "Tên sản phẩm";
-    private int unitPrice = 0;
-    private String imageUrl = "";
-    private String description = "không có mô tả sản phẩm";
-    private ArrayList<ItemCategory> itemCategories = null;
+    @SerializedName("id") private String id = "MDH";
+    @SerializedName("name") private String name = "Tên sản phẩm";
+    @SerializedName("price") private int unitPrice = 0;
+    @SerializedName("url_image") private String imageUrl = "";
+    @SerializedName("description") private String description = "không có mô tả sản phẩm";
+    @SerializedName("categories") private ArrayList<ItemCategory> itemCategories = null;
     public Item(){
         number += 1;
         createItem();

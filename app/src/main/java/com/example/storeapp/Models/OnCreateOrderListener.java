@@ -1,4 +1,4 @@
-package com.example.storeapp.Activities;
+package com.example.storeapp.Models;
 
 import com.example.storeapp.Models.Order;
 

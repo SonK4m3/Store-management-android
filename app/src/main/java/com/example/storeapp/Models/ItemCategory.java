@@ -5,13 +5,15 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 public class ItemCategory implements Parcelable {
-    private String id = "MDH";
-    private String name;
-    private int quantity = 5;
-
+    @SerializedName("id") private String id = "MDH";
+    @SerializedName("name") private String name;
+    @SerializedName("quantity") private int quantity = 5;
+    @SerializedName("image_url") private String image_url = "";
     public ItemCategory(){
 
     }
@@ -26,6 +28,7 @@ public class ItemCategory implements Parcelable {
         id = in.readString();
         name = in.readString();
         quantity = in.readInt();
+        image_url = in.readString();
     }
 
     public static final Creator<ItemCategory> CREATOR = new Creator<ItemCategory>() {
@@ -50,6 +53,7 @@ public class ItemCategory implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeInt(quantity);
+        parcel.writeString(image_url);
     }
 
     public String getId() {
@@ -76,24 +80,12 @@ public class ItemCategory implements Parcelable {
         this.quantity = quantity;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ItemCategory)) return false;
-
-        ItemCategory that = (ItemCategory) o;
-
-        if (getQuantity() != that.getQuantity()) return false;
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
-        return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
+    public String getImage_url() {
+        return image_url;
     }
 
-    @Override
-    public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + getQuantity();
-        return result;
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
     public static ArrayList<ItemCategory> createList(int num){
