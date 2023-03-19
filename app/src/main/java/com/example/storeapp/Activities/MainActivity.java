@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
         retrofitHelper = RetrofitHelper.getInstance();
         apiService = retrofitHelper.create(ApiService.class);
         orderList = new ArrayList<>();
-
         // 3. Create page view Adapter
         MainAdapter adapter = new MainAdapter(getSupportFragmentManager(), getLifecycle());
         // 3.1. update adapter to viewpager
@@ -112,11 +111,6 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
         mb.putParcelable(MainActivity.SEND_SHOPPING_CART, shoppingCart);
         mb.putBoolean(MainActivity.ITEM_CHOOSING, isChooseItem);
         return mb;
-    }
-
-    public void setCreateOrderListener(OnCreateOrderListener createOrderListener) {
-        Log.d("AAA", "hello createOrderListener " + createOrderListener);
-        this.createOrderListener = createOrderListener;
     }
 
     public void setOnCalledApi(OnCalledApi onCalledApi){
@@ -233,13 +227,19 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
         ((HomePageFragment) getSupportFragmentManager().getFragments().get(0)).showItemList();
         Log.d("AAA", "select customer: customer name " + this.shoppingCart.getCustomer().getName() );
 
-        apiGetItems();
-
+//        apiGetItems();
+        apiGetOrdersAndItems();
     }
 
     @Override
     public void onRemoveOrder(int position) {
         orderList.remove(position);
+    }
+
+    @Override
+    public void onOrderFragmentCreated(OnCreateOrderListener onCreateOrderListener) {
+        Log.d("AAA", "hello main from order");
+        this.createOrderListener = onCreateOrderListener;
     }
 
     void apiGetItems(){

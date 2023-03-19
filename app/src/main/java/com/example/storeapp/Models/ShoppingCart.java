@@ -16,14 +16,12 @@ public class ShoppingCart implements Parcelable{
     private int totalPrice = 0;
 
     public ShoppingCart(){
-
+        this.itemList = new ArrayList<>();
     }
 
     public ShoppingCart(Customer customer){
         this.customer = customer;
         this.itemList = new ArrayList<>();
-        this.totalPrice = 0;
-        this.totalQuantity = 0;
     }
 
     public ShoppingCart(Customer customer, ArrayList<Pair<Item, Integer>> itemList){
