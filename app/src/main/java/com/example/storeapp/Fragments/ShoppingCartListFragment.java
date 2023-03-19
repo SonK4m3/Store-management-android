@@ -49,6 +49,7 @@ public class ShoppingCartListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mBundle = getArguments();
         shoppingCart = mBundle.getParcelable(MainActivity.SEND_SHOPPING_CART);
+        shoppingCart = (shoppingCart == null) ? new ShoppingCart() : shoppingCart;
     }
 
     @Nullable

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.storeapp.Models.Item;
 import com.example.storeapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ItemVi
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Pair<Item, Integer> pItem = (Pair<Item, Integer>) mItemList.get(position);
+        if(!pItem.first.getImageUrl().equals(""))
+            Picasso.get().load(pItem.first.getImageUrl()).into(holder.itemImage);
         holder.itemName.setText(pItem.first.getName());
         holder.quantity.setText(pItem.second.toString());
         holder.total.setText(pItem.first.getPriceAsString(pItem.second));
@@ -74,6 +78,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ItemVi
 
     class ItemViewHolder extends RecyclerView.ViewHolder{
         private View itemview;
+        public ImageView itemImage;
         public TextView itemName;
         public TextView quantity;
         public TextView total;
@@ -82,6 +87,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ItemVi
         public ItemViewHolder(View itemView){
             super(itemView);
             itemview = itemView;
+            itemImage = itemView.findViewById(R.id.itemImage);
             itemName = itemView.findViewById(R.id.itemName);
             quantity = itemView.findViewById(R.id.quantity_content);
             total = itemView.findViewById(R.id.total_content);

@@ -1,18 +1,15 @@
 package com.example.storeapp.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.storeapp.Fragments.ShoppingCartListFragment;
@@ -43,7 +40,8 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         isChoosingItem = shoppingCartData.getBoolean(MainActivity.ITEM_CHOOSING);
         shoppingCart = shoppingCartData.getParcelable(MainActivity.SEND_SHOPPING_CART);
 
-        Log.d("AAA", "onCreate shopping cart: " + Integer.toString(shoppingCart.getCustomer().getShoppingCart().getItemList().size()));
+        if(shoppingCart != null)
+            Log.d("AAA", "onCreate shopping cart: " + Integer.toString(shoppingCart.getCustomer().getShoppingCart().getItemList().size()));
 
         // 3. get item list recyclerview
         ShoppingCartListFragment childrenFragment = new ShoppingCartListFragment();
