@@ -26,12 +26,20 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
     private OrderAdapter adapter = null;
     private OnOrderClickListener mDataTransferListener = null;
 
+//    public static OrderFragment getInstance(MainActivity activity){
+//        OrderFragment orderFragment = new OrderFragment();
+//        activity.setOnOrderFragmentCreated(orderFragment);
+//        return orderFragment;
+//    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
             // 1. assign from parent activity
             mDataTransferListener = (OnOrderClickListener) context;
+            ((MainActivity) getActivity()).setOnOrderFragmentCreated(this);
+
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString());
         }
@@ -41,9 +49,6 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = OrderListLayoutBinding.inflate(inflater, container, false);
-        if(mDataTransferListener != null){
-            mDataTransferListener.onOrderFragmentCreated(this::onOrderCreated);
-        }
         return binding.getRoot();
     }
 
@@ -86,6 +91,5 @@ public class OrderFragment extends Fragment implements OnCreateOrderListener {
      */
     public interface OnOrderClickListener {
         void onRemoveOrder(int position);
-        void onOrderFragmentCreated(OnCreateOrderListener onCreateOrderListener);
     }
 }

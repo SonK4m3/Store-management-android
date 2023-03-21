@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class ItemsResponse {
-    @SerializedName("items") public ArrayList<Item> itemList = new ArrayList<>();
+//    @SerializedName("items") public ArrayList<Item> itemList = new ArrayList<>();
+    @SerializedName("customers") public ArrayList<Customer> customersList = new ArrayList<>();
     @SerializedName("orders") public ArrayList<Order> orderList = new ArrayList<>();
 }

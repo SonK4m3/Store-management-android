@@ -10,9 +10,11 @@ import retrofit2.http.GET;
 
 public interface ApiService {
 
-    @GET("v3/0d91bcb2-ce00-4605-8698-50b80b09f2bc")
+    @GET("v3/fd6c0312-9763-4474-9678-9219e418bdb1")
     Call<List<Item>> getItems();
 
-    @GET("v3/18fdd193-0271-44b3-9f50-e243b76f31b8")
-    Call<ItemsResponse> getOrdersAndItems();
+//    @GET("v3/18fdd193-0271-44b3-9f50-e243b76f31b8")
+//    Call<ItemsResponse> getOrdersAndItems();
+    @GET("v3/d873d150-fd5c-4dcf-aed1-8b38390957f7")
+    Call<ItemsResponse> getOrdersAndCustomers();
 }

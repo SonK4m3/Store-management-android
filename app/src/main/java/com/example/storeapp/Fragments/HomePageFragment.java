@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.storeapp.Activities.MainActivity;
-import com.example.storeapp.Models.Customer;
 import com.example.storeapp.databinding.HomeLayoutBinding;
 
 public class HomePageFragment extends Fragment {
@@ -47,8 +46,14 @@ public class HomePageFragment extends Fragment {
         homeLayoutBinding = null;
     }
 
-    public void showItemList(){
-        homeLayoutBinding.notificationSelectCustomer.setVisibility(View.GONE);
-        homeLayoutBinding.fragmentContainer.setVisibility(View.VISIBLE);
+    public void showItemList(boolean show){
+        if(show){
+            homeLayoutBinding.notificationSelectCustomer.setVisibility(View.GONE);
+            homeLayoutBinding.fragmentContainer.setVisibility(View.VISIBLE);
+        } else {
+            homeLayoutBinding.notificationSelectCustomer.setVisibility(View.VISIBLE);
+            homeLayoutBinding.fragmentContainer.setVisibility(View.GONE);
+        }
+
     }
 }

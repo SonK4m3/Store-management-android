@@ -5,15 +5,17 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 
 public class Customer implements Parcelable {
 
-    private String id;
-    private String name;
-    private String address;
+    @SerializedName("id") private String id;
+    @SerializedName("name") private String name;
+    @SerializedName("address") private String address;
     private ShoppingCart shoppingCart;
     public Customer(){
-
+        this.shoppingCart = new ShoppingCart(this);
     }
 
     public Customer(String id, String name, String address){
@@ -27,7 +29,6 @@ public class Customer implements Parcelable {
         id = in.readString();
         name = in.readString();
         address = in.readString();
-//        shoppingCart = in.readParcelable(ShoppingCart.class.getClassLoader());
     }
 
     public static final Creator<Customer> CREATOR = new Creator<Customer>() {
@@ -52,7 +53,6 @@ public class Customer implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeString(address);
-//        parcel.writeParcelable(shoppingCart, i);
     }
 
     public String getId() {

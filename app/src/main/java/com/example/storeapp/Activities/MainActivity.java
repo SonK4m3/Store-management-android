@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.storeapp.Fragments.CustomerFragment;
@@ -48,7 +49,10 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
     public static final String SEND_QUANTITY = "send quantity";
     public static final String SEND_CUSTOMER = "send customer";
     public static final String SEND_SHOPPING_CART = "send shopping cart";
-
+    public static final String SEND_ACTION_CUSTOMER = "send action customer";
+    public static final String SEND_CUSTOMER_POSITION = "send customer position";
+    public static final String BACK_HOME_LIST_VIEW = "back home list view";
+    public static final String STAY_CUSTOMER_VIEW = "stay customer view";
     public static final String SEND_CREATE_ORDER = "send created order";
     public static final String SEND_ORDER_LIST = "send order list";
     public static final int HOME_PAGE_ID = 0;
@@ -64,12 +68,13 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
             R.drawable.ic_menu,
             R.drawable.ic_customer
     };
-
+    private List<Fragment> fragmentList = null;
     private Customer currentCustomer = null;
     private ShoppingCart shoppingCart = null;
     private ArrayList<Order> orderList = null;
     private OnCreateOrderListener createOrderListener = null;
     private OnCalledApi calledApi = null;
+    private OnCalledApi calledApi2 = null;
     private Retrofit retrofitHelper = null;
     private ApiService apiService = null;
     @Override
@@ -84,14 +89,20 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
         retrofitHelper = RetrofitHelper.getInstance();
         apiService = retrofitHelper.create(ApiService.class);
         orderList = new ArrayList<>();
+
+        fragmentList = new ArrayList<>();
+        initializeSubFragment();
         // 3. Create page view Adapter
-        MainAdapter adapter = new MainAdapter(getSupportFragmentManager(), getLifecycle());
+        MainAdapter adapter = new MainAdapter(fragmentList, getSupportFragmentManager(), getLifecycle());
+        binding.viewPager.setOffscreenPageLimit(2);
         // 3.1. update adapter to viewpager
         binding.viewPager.setAdapter(adapter);
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 setTitle(titles[position]);
+                if(position != HOME_PAGE_ID)
+                    binding.viewPager.setOffscreenPageLimit(1);
             }
         });
         // 3.2 update icon and content to tab layout
@@ -100,6 +111,14 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
                     tab.setText(titles[position]);
                     tab.setIcon(icon_pager[position]);
                 })).attach();
+        apiGetOrdersAndCustomers();
+    }
+
+    void initializeSubFragment(){
+        CustomerFragment customerFragment = new CustomerFragment();
+        fragmentList.add(new HomePageFragment());
+        fragmentList.add(new OrderFragment());
+        fragmentList.add(customerFragment);
     }
 
     public ViewPager2 getViewPager(){
@@ -113,8 +132,17 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
         return mb;
     }
 
-    public void setOnCalledApi(OnCalledApi onCalledApi){
-        this.calledApi = onCalledApi;
+    public void setOnOrderFragmentCreated(OnCreateOrderListener onCreateOrderListener) {
+        // update createOrderListener when OrderFragmentCreated
+        Log.d("AAA", "hello main from order");
+        this.createOrderListener = onCreateOrderListener;
+    }
+
+    public void setOnCalledApi(OnCalledApi onCalledApi, int position){
+        if(position == 0)
+            this.calledApi = onCalledApi;
+        else if(position == 1)
+            this.calledApi2 = onCalledApi;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -216,19 +244,24 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
     }
 
     @Override
-    public void onSendCurrentCustomer(Customer currCustomer) {
+    public void onSendCurrentCustomer(Customer currCustomer, String action) {
         // call from customer fragment
+        boolean hadData = (currCustomer != null);
         // 1. update current customer
-        // 2. update shopping cart
         currentCustomer = currCustomer;
-        shoppingCart = currentCustomer.getShoppingCart();
+        // 2. update shopping cart
+        shoppingCart = (currentCustomer == null) ? null : currentCustomer.getShoppingCart();
         // 3. back to home list to select item
-        binding.viewPager.setCurrentItem(MainActivity.HOME_PAGE_ID, false);
-        ((HomePageFragment) getSupportFragmentManager().getFragments().get(0)).showItemList();
-        Log.d("AAA", "select customer: customer name " + this.shoppingCart.getCustomer().getName() );
-
-//        apiGetItems();
-        apiGetOrdersAndItems();
+        ((HomePageFragment) getSupportFragmentManager().getFragments().get(0)).showItemList((currCustomer == null) ? false : true);
+        if(action.equals(BACK_HOME_LIST_VIEW)) {
+            binding.viewPager.setCurrentItem(MainActivity.HOME_PAGE_ID, false);
+//            if(!hadData)
+                apiGetItems();
+            Log.d("AAA",
+                    (currentCustomer == null) ?
+                            "chua chon khach hang" :
+                            "select customer: customer name " + this.shoppingCart.getCustomer().getName() );
+        }
     }
 
     @Override
@@ -236,40 +269,38 @@ public class MainActivity extends AppCompatActivity implements CustomerFragment.
         orderList.remove(position);
     }
 
-    @Override
-    public void onOrderFragmentCreated(OnCreateOrderListener onCreateOrderListener) {
-        Log.d("AAA", "hello main from order");
-        this.createOrderListener = onCreateOrderListener;
-    }
-
     void apiGetItems(){
+        Log.d("AAA", "call api to get items");
         apiService.getItems().enqueue(new Callback<List<Item>>() {
             @Override
             public void onResponse(Call<List<Item>> call, Response<List<Item>> response) {
                 if(response.isSuccessful()){
                     List<Item> ls = response.body();
+                    Log.d("AAA", "customersList size: " + Integer.toString(ls.size()));
                     if(calledApi != null)
                         calledApi.onGetItemsSuccess(ls);
-                    Log.d("AAA",ls.get(0).toString());
+                    Log.d("AAA",Integer.toString(ls.size()));
                 }
             }
 
             @Override
             public void onFailure(Call<List<Item>> call, Throwable t) {
-                Log.d("AAA", "from main: call api " + t.getMessage());
+                Log.d("AAA", "from main: call item: " + t.getMessage());
             }
         });
     }
 
-    void apiGetOrdersAndItems(){
-        apiService.getOrdersAndItems().enqueue(new Callback<ItemsResponse>() {
+    void apiGetOrdersAndCustomers(){
+        Log.d("AAA", "call api to get orders and customers");
+        apiService.getOrdersAndCustomers().enqueue(new Callback<ItemsResponse>() {
             @Override
             public void onResponse(Call<ItemsResponse> call, Response<ItemsResponse> response) {
                 if(response.isSuccessful()){
                     ItemsResponse itRp = response.body();
+                    Log.d("AAA", "customersList size: " + Integer.toString(itRp.customersList.size()) + "ordersList size: " + Integer.toString(itRp.orderList.size()));
                     orderList.addAll(itRp.orderList);
-                    if(calledApi != null){
-                        calledApi.onGetItemsSuccess(itRp.itemList);
+                    if(calledApi2 != null){
+                        calledApi2.onGetCustomerSuccess(itRp.customersList);
                     }
                     if(createOrderListener != null)
                         createOrderListener.onOrderCreated(orderList);

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.storeapp.Activities.ItemDetailActivity;
 import com.example.storeapp.Activities.MainActivity;
+import com.example.storeapp.Models.Customer;
 import com.example.storeapp.Models.Item;
 import com.example.storeapp.Models.OnCalledApi;
 import com.example.storeapp.R;
@@ -35,7 +36,7 @@ public class HomeListFragment extends Fragment implements OnCalledApi {
         super.onAttach(context);
         try {
             // 1. assign from parent activity
-            ((MainActivity) getActivity()).setOnCalledApi(this);
+            ((MainActivity) getActivity()).setOnCalledApi(this, 0);
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString());
         }
@@ -94,5 +95,10 @@ public class HomeListFragment extends Fragment implements OnCalledApi {
             binding.loadingItem.setVisibility(View.GONE);
             binding.recyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onGetCustomerSuccess(List<Customer> customers) {
+        return;
     }
 }
