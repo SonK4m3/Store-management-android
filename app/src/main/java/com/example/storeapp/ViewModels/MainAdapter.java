@@ -3,37 +3,34 @@ package com.example.storeapp.ViewModels;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStateManagerControl;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.storeapp.Activities.MainActivity;
 import com.example.storeapp.Fragments.OrderFragment;
 import com.example.storeapp.Fragments.CustomerFragment;
 import com.example.storeapp.Fragments.HomePageFragment;
 
+import java.util.List;
+
 public class MainAdapter extends FragmentStateAdapter {
+    private List<Fragment> fragmentList;
 
-    private static final int FRAGMENT_NUMBER = 3;
-
-    public MainAdapter(FragmentManager fragmentManager, Lifecycle lifecycle) {
+    public MainAdapter(List<Fragment> fragmentList, FragmentManager fragmentManager, Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-    }
+        this.fragmentList = fragmentList;
 
+    }
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
-            case 0:
-                return new HomePageFragment();
-            case 1:
-                return new OrderFragment();
-            case 2:
-                return new CustomerFragment();
-        }
-        return null;
+        return fragmentList.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return FRAGMENT_NUMBER;
+        return fragmentList.size();
     }
 }

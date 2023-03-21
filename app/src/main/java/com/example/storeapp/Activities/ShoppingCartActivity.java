@@ -43,14 +43,14 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         if(shoppingCart != null)
             Log.d("AAA", "onCreate shopping cart: " + Integer.toString(shoppingCart.getCustomer().getShoppingCart().getItemList().size()));
 
-        // 3. get item list recyclerview
+        // 3. get item list recyclerview fragment
         ShoppingCartListFragment childrenFragment = new ShoppingCartListFragment();
         childrenFragment.setArguments(shoppingCartData);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(binding.fragmentContainer.getId(), childrenFragment).commitNow();
-
+        // 4. Show 3. if has chose items
         setViewList(isChoosingItem);
-
+        // 4.1 if did not chose item back to main activity
         binding.notificationChooseItem.setOnClickListener(v -> {
             sendDataToMain();
         });
@@ -66,9 +66,11 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public void setViewList(boolean ok){
-        if(ok){
+    /*
+    make list shopping carts visible and notification gone and gainsay them
+     */
+    public void setViewList(boolean ok) {
+        if (ok) {
             binding.notification.setVisibility(View.GONE);
             binding.fragmentContainer.setVisibility(View.VISIBLE);
         } else {
@@ -78,13 +80,8 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
     }
 
     @Override
-    public void onBooleanTransfer(boolean data) {
-        Log.d("AAA", "shopping cart statement: " + data);
-        isChoosingItem = data;
-    }
-
-    @Override
     public void onClearShoppingCart() {
+        //1. when remove all item cart, change isChoosingItem to false -> update view to notification visible
         Log.d("AAA", "Clear all item");
         shoppingCart.clear();
         isChoosingItem = false;
@@ -93,14 +90,18 @@ public class ShoppingCartActivity extends AppCompatActivity implements ShoppingC
 
     @Override
     public void onRemoveShoppingCart(ArrayList<Pair<Item, Integer>> cartItemList) {
+        //1. when remove item cart, re update cart item list
         Log.d("AAA", "remove item, size list contain: " + Integer.toString(cartItemList.size()));
+        //1.1 new list is remove removed-item, re-assign to old list
         this.shoppingCart.setItemList(cartItemList);
+        //1.2 if remove last item -> set to is not chose item
         if(cartItemList.isEmpty()) isChoosingItem = false;
         setViewList(isChoosingItem);
     }
 
     @Override
     public void onCreateOrder() {
+        // 1. create new order then clear all shoping cart item
         Order nOrder = new Order(shoppingCart.copy());
         ShoppingCart spc = nOrder.getShoppingCart();
         order = nOrder;

@@ -2,7 +2,6 @@ package com.example.storeapp.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.storeapp.Activities.MainActivity;
-import com.example.storeapp.Activities.ShoppingCartActivity;
-import com.example.storeapp.Models.Customer;
 import com.example.storeapp.Models.Item;
-import com.example.storeapp.Models.Order;
 import com.example.storeapp.Models.ShoppingCart;
 import com.example.storeapp.ViewModels.CartItemAdapter;
 import com.example.storeapp.databinding.ShoppingCartItemListLayoutBinding;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class ShoppingCartListFragment extends Fragment {
     private ShoppingCartItemListLayoutBinding binding = null;
     private CartItemAdapter adapter = null;
     private ShoppingCart shoppingCart = null;
-    private boolean isChoosingItem = false;
     private Bundle mBundle = null;
     private  OnDataTransferListener mDataTransferListener;
 
@@ -62,19 +55,21 @@ public class ShoppingCartListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        // 1. initial text view of quantity and price with contain shopping carts
         binding.totalQuantityText.setText(Integer.toString(shoppingCart.getTotalQuantity()));
         binding.totalPriceText.setText(shoppingCart.getTotalPriceFormat());
-
+        // 2. create view adapter
         ArrayList<Pair<Item, Integer>> cartItemList = shoppingCart.getItemList();
-
         adapter = new CartItemAdapter(cartItemList, getContext());
+        // 3. set cart item click listener
         adapter.setOnClickCartItem(new CartItemAdapter.OnClickCartItem() {
             @Override
             public void onRemoveItemCart() {
+                // 3.1 update new list to shopping cart then re-update text view of quantity and price
                 shoppingCart.setItemList(cartItemList);
                 binding.totalQuantityText.setText(Integer.toString(shoppingCart.getTotalQuantity()));
                 binding.totalPriceText.setText(shoppingCart.getTotalPriceFormat());
+                // 3.2 callback to shopping cart activity to update state view and shopping cart list
                 if(mDataTransferListener != null){
                     mDataTransferListener.onRemoveShoppingCart(cartItemList);
                 }
@@ -86,11 +81,12 @@ public class ShoppingCartListFragment extends Fragment {
         binding.recyclerView.setLayoutManager(linearLayoutManager);
 
         binding.removeAll.setOnClickListener(v -> {
+            // 4. clear all cart items
             clearCartItems();
         });
 
         binding.createOrder.setOnClickListener(v -> {
-            // send list item to order
+            // 5. send list item to order
             createOrder();
         });
     }
@@ -109,19 +105,12 @@ public class ShoppingCartListFragment extends Fragment {
         }
     }
 
-    void sendBooleanToActivity(boolean data){
-        if(mDataTransferListener != null){
-            mDataTransferListener.onBooleanTransfer(data);
-        }
-    }
-
     void createOrder(){
         if(mDataTransferListener != null){
             mDataTransferListener.onCreateOrder();
         }
     }
     public interface OnDataTransferListener {
-        void onBooleanTransfer(boolean data);
         void onClearShoppingCart();
         void onRemoveShoppingCart(ArrayList<Pair<Item, Integer>> cartItemList);
         void onCreateOrder();

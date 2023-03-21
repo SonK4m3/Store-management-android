@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/customer_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Đỗ Hải Dương"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        android:textSize="16sp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/select_customer_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/customer_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Phường Đại Kim, Quận Hoàng Mai, Thành phố Hà Nội"
+        android:textSize="14sp"
+        app:layout_constrainedWidth="true"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintEnd_toStartOf="@id/select_customer_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/customer_name" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/select_customer_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="40sp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/rounded"
+        android:text="Chọn"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/order_line"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customer_address"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
