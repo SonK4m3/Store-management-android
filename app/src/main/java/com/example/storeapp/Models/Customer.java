@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 
 public class Customer implements Parcelable {
 
@@ -95,6 +97,21 @@ public class Customer implements Parcelable {
         newCustomer.setName(this.name);
         newCustomer.setAddress(this.address);
         return newCustomer;
+    }
+
+    /*
+    @param m : string need find
+    @param ls: customer list that find customer who had name contain m
+    return list of customer whose have name contain m
+     */
+    public static ArrayList<Customer> findCustomer(String m, ArrayList<Customer> ls){
+        ArrayList<Customer> newLs = new ArrayList<>();
+        for(Customer c : ls){
+            if(c.getName().contains(m)){
+                newLs.add(c);
+            }
+        }
+        return newLs;
     }
 
     public static Customer createSample(){

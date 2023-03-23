@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,7 @@ public class CustomerFragment extends Fragment implements CustomerAdapter.OnClic
     private boolean isChooseCustomer = false;
     private CustomerLayoutBinding binding = null;
     private ArrayList<Customer> customerList = null;
+    private ArrayList<Customer> previousCustomerList = null;
     private Customer currentCustomer = null;
     private OnSelectCustomerListener onSelectCustomerListener = null;
     private CustomerAdapter adapter = null;
@@ -50,6 +52,7 @@ public class CustomerFragment extends Fragment implements CustomerAdapter.OnClic
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         customerList = new ArrayList<>();
+        previousCustomerList = new ArrayList<>();
         Log.d("AAA", "create customer list");
     }
 
@@ -73,6 +76,16 @@ public class CustomerFragment extends Fragment implements CustomerAdapter.OnClic
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         binding.customerRecyclerview.setAdapter(adapter);
         binding.customerRecyclerview.setLayoutManager(linearLayoutManager);
+
+        binding.searchBtn.setOnClickListener(v -> {
+            String searchText = binding.searchingText.getText().toString();
+            ArrayList<Customer> filter = Customer.findCustomer(searchText, previousCustomerList);
+            customerList.clear();
+            customerList.addAll(filter);
+            adapter.notifyDataSetChanged();
+            Log.d("AAA", searchText + " " + Integer.toString(customerList.size()));
+
+        });
 
         binding.addCustomerBtn.setOnClickListener(v -> {
             Customer nCustomer = new Customer();
@@ -141,18 +154,48 @@ public class CustomerFragment extends Fragment implements CustomerAdapter.OnClic
 
     @Override
     public void onAddCustomer(Customer customer) {
-        customerList.add(customer);
-        adapter.notifyItemInserted(customerList.size() - 1);
+        // 1. if this id customer is exist
+        for(Customer c : previousCustomerList){
+            if(c.getId().equals(customer.getId())){
+                Toast.makeText(getContext(), "This customer is exist", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        // 2. else add new customer
+        previousCustomerList.add(customer);
+        customerList.clear();
+        customerList.addAll(previousCustomerList);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onUpdateCustomer(Customer customer, int position) {
+        // 1. check customer in list or not
         if(-1 < position && position < customerList.size()) {
+            String old_id = customerList.get(position).getId();
+            // 1.1 check new id is exist or not
+            for(Customer c : previousCustomerList){
+                if(c.getId().equals(customer.getId()) && !old_id.equals(customer.getId())){
+                    Toast.makeText(getContext(), "This id customer is exist", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            // 2 else update customer
+            // 2.1 if this customer is current customer, update view and send notify to main activity
             if(customerList.get(position).equals(currentCustomer)){
                 currentCustomer = customer;
                 setCurrentCustomerView();
                 sendCurrentCustomerToActivity(MainActivity.STAY_CUSTOMER_VIEW);
             }
+            // 2.2 remove in previous list
+            for(int i = 0; i < previousCustomerList.size(); i++){
+                if(previousCustomerList.get(i).getId().equals(old_id)){
+                    previousCustomerList.remove(i);
+                    previousCustomerList.add(i, customer);
+                    break;
+                }
+            }
+            // 2.3 update in list is shown in filter view
             customerList.remove(position);
             customerList.add(position, customer);
             adapter.notifyItemRangeChanged(position, customerList.size());
@@ -161,7 +204,16 @@ public class CustomerFragment extends Fragment implements CustomerAdapter.OnClic
 
     @Override
     public void onRemoveCustomer(int position) {
+        // 1. check customer is in list or not
         if(-1 < position && position < customerList.size()) {
+            // 1.1 reomve customer in previous list
+            String old_id = customerList.get(position).getId();
+            for(int i = 0; i < previousCustomerList.size(); i++){
+                if(previousCustomerList.get(i).getId().equals(old_id)){
+                    previousCustomerList.remove(i);
+                }
+            }
+            // 1.2 if customer is current customer, set current customer is null and notify to main activity
             if(customerList.get(position).equals(currentCustomer)){
                 currentCustomer = null;
                 setCurrentCustomerView();
@@ -181,8 +233,12 @@ public class CustomerFragment extends Fragment implements CustomerAdapter.OnClic
     @Override
     public void onGetCustomerSuccess(List<Customer> customers) {
         Log.d("AAA", "from customer: " + Integer.toString(customers.size()));
+        // 1. customer list is list filter to show in recyclerview
+        // 2. previous list is list contain all customer
+        previousCustomerList.clear();
+        previousCustomerList.addAll(customers);
         customerList.clear();
-        customerList.addAll(customers);
+        customerList.addAll(previousCustomerList);
         adapter.notifyDataSetChanged();
         showCustomerList(!customerList.isEmpty());
     }
